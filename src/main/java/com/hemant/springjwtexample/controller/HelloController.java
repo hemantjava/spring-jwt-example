@@ -39,17 +39,15 @@ public class HelloController {
 
     //localhost:8181/authenticate
     @PostMapping("/authenticate")
-    public ResponseEntity<?> authRequest(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponse> authRequest(@RequestBody AuthenticationRequest request) {
         try {
             authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(),
                     request.getPassword()));
-        } catch (BadCredentialsException exception) {
+        } catch (Exception exception) {
             throw new BadCredentialsException("Bad credential ...", exception);
         }
-        final UserDetails userDetails = myUserDetailsService
-            .loadUserByUsername(request.getUsername());
-        final String token = jwtUtil.generateToken(userDetails);
+        final String token = jwtUtil.generateToken(request.getUsername());
         return ResponseEntity.ok(new AuthenticationResponse(token));
     }
 }
