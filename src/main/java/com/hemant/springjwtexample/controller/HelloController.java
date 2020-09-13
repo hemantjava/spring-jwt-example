@@ -24,9 +24,6 @@ public class HelloController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private MyUserDetailsService myUserDetailsService;
-
-    @Autowired
     private JwtUtil jwtUtil;
 
     //localhost:8181/hello
