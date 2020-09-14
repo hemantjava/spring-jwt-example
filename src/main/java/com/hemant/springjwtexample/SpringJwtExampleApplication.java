@@ -10,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Log4j2
 @SpringBootApplication
@@ -18,12 +19,15 @@ public class SpringJwtExampleApplication {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+
 	@PostConstruct
 	private void initUsers() {
 		final List<User> userList = Stream
-				.of(User.builder().userName("hemant").passWord("sahu").build(),
-						User.builder().userName("chitresh").passWord("nirala").build(),
-						User.builder().userName("sonu").passWord("sahu").build()).collect(Collectors.toList());
+				.of(User.builder().userName("hemant").passWord(bCryptPasswordEncoder.encode("sahu")).build(),
+						User.builder().userName("chitresh").passWord(bCryptPasswordEncoder.encode("nirala")).build(),
+						User.builder().userName("sonu").passWord(bCryptPasswordEncoder.encode("sahu")).build()).collect(Collectors.toList());
 		final List<User> userList1 = userRepository.saveAll(userList);
 		log.info(userList1);
 	}
